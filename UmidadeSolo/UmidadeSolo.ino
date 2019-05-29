@@ -15,30 +15,30 @@ void loop() {
 	EEPROM.get(0, H2O);
 	EEPROM.get(100, AR);
 	lerFreq(500);
-	float Frelativa= (freq-AR)/(H2O-AR);
+	float Frelativa = (freq-AR)/(H2O-AR);
 	Serial.println(Frelativa,4);
 	digitalWrite(13, LOW);
 	delay(500);
 }
 
 void lerFreq(float intervalo){
-	float pulsos=0;
-	float tempoInicial=millis();
-	float  tempo=tempoInicial;
+	float pulsos = 0;
+	float tempoInicial = millis();
+	float tempo = tempoInicial;
 	boolean pulso;
 	while(tempo <= (tempoInicial + intervalo)){
 		tempo = millis();
-		if(digitalRead(3)==HIGH){
-			if(pulso==HIGH){
+		if(digitalRead(3) == HIGH){
+			if(pulso == HIGH){
 				pulsos = pulsos + 1;
 			}
 			pulso=LOW; 
-     	}
-    	else{
-     		pulso=HIGH;
- 		}
+		}
+		else{
+			pulso=HIGH;
+		}
 	}
- 	freq = pulsos/(intervalo/1000); 
+	freq = pulsos/(intervalo/1000); 
 }
 
 void serialEvent(){
@@ -54,13 +54,12 @@ void serialEvent(){
 			EEPROM.put(100, AR);
 			Serial.println(AR);
 		}
-
 		if(inputString.substring(0,3) == "H2O"){
 			for(int i=1; i <= 10; i++){
 				lerFreq(1000);
 				int soma = soma+freq;
 				H2O = soma/i;
-    		}
+			}
 			Serial.println(H2O);
 			EEPROM.put(0, H2O);
 			Serial.println(H2O);
